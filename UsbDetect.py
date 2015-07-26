@@ -1,10 +1,29 @@
+from __future__ import  print_function
 __author__ = 'shantanu'
+try:
+    import dbus
+    import gobject
+    from dbus.mainloop.glib import DBusGMainLoop
+except ImportError:
+    print("python d-bus is not installed")
+import subprocess
 
-import dbus
+
+
+def check_udisks():
+    p = subprocess.Popen("whereis udisks", stdout=subprocess.PIPE, shell=True)
+    (output, err) = p.communicate()
+    if "/bin/" in output:
+        print("Udisks is installed ")
+    else:
+        print("Udisks is not installed")
+
+check_udisks()
+
 
 bus = dbus.SystemBus()
 
-ud_manager_obj = bus.get_object("org.freedesktop.UDisks", "/org/freedesktop/UDisks")
+ud_manager_obj = bus.get_object("org.freedesktop.UDisks2", "/org/freedesktop/UDisks")
 
 ud_manager = dbus.Interface(ud_manager_obj, 'org.freedesktop.UDisks')
 
